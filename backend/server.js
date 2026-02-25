@@ -16,7 +16,7 @@ fastify.register(fastifyCookie, {
 });
 
 fastify.get("/", async function handler(request, response) {
-        // Testing only if the login works. We run `curl -b cookie.jar http://localhost:$PORT/` to test
+	// Testing only if the login works. We run `curl -b cookie.jar http://localhost:$PORT/` to test
 	const data = await verifyJwt({ token: request.cookies.session });
 	return data;
 });

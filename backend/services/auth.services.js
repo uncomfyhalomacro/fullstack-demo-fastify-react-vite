@@ -23,7 +23,7 @@ const login = async (username, password) => {
 	};
 
 	const verified = await verify(user.hashed_password, password, options);
-	return { verified, role: user.role, id: user.id, email: user.email }
+	return { verified, role: user.role, id: user.id, email: user.email };
 };
 
 const register = async (username, password, email, contact_number) => {

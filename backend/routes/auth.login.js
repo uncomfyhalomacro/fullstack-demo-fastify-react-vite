@@ -1,7 +1,6 @@
 import { generateJwt } from "../services/auth.jwt.js";
 import { login } from "../services/auth.services.js";
 
-
 const loginHandler = async (req, res) => {
 	const { username, password } = req.body;
 	try {
@@ -13,7 +12,7 @@ const loginHandler = async (req, res) => {
 				role,
 				email,
 			});
-			res.setCookie('session', jwtToken, { secure: true })
+			res.setCookie("session", jwtToken, { secure: true });
 			return res.code(200).send({
 				message: "User has logged in",
 			});
