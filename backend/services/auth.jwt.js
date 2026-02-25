@@ -1,5 +1,6 @@
-import { sign, verify, Algorithm } from "@node-rs/jsonwebtoken";
 import { loadEnvFile } from "node:process";
+import { sign, verify } from "@node-rs/jsonwebtoken";
+
 loadEnvFile();
 
 const SECRET = process.env.JWT_SECRET || "secret";
