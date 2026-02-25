@@ -1,5 +1,5 @@
-import { randomBytes } from "node:crypto";
 import { hash, verify } from "@node-rs/argon2";
+import { randomBytes } from "node:crypto";
 import UserModel from "../models/UserModel.js";
 
 const login = async (username, password) => {
@@ -16,13 +16,7 @@ const login = async (username, password) => {
 		throw new Error("user does not exist");
 	}
 
-	const options = {
-		salt: Buffer.from(user.salt),
-		parallelism: 4,
-		algorithm: 2,
-	};
-
-	const verified = await verify(user.hashed_password, password, options);
+	const verified = await verify(user.hashed_password, password);
 	return { verified, role: user.role, id: user.id, email: user.email };
 };
 
@@ -67,5 +61,5 @@ const register = async (username, password, email, contact_number) => {
 		salt: salt.toString(),
 	});
 };
+export { login, register };
 
-export { register, login };
