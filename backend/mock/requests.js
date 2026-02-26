@@ -36,7 +36,7 @@ async function main() {
 		const cookieHeader = Object.entries(cookieJar)
 			.map(([name, value]) => `${name}=${value}`)
 			.join("; ");
-		if (cookieHeader) headers["Cookie"] = cookieHeader;
+		if (cookieHeader) headers.Cookie = cookieHeader;
 
 		if (method.toUpperCase() === "POST" || method.toUpperCase() === "PUT") {
 			headers["content-type"] =
