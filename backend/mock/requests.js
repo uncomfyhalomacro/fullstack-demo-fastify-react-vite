@@ -15,9 +15,10 @@ function ask(question) {
 
 async function main() {
 	let notDone = true;
+	const cookieJar = {}; // Stores cookies
 
 	while (notDone) {
-		const pathPrefix = await ask("Provide path prefix: ");
+		const pathPrefix = await ask("Provide path prefix (must start with /): ");
 		const method = await ask("Provide method: ");
 
 		let data;
@@ -28,8 +29,15 @@ async function main() {
 			contentType = await ask("Provide content type: ");
 		}
 
-		const url = `http://localhost:${PORT}/${pathPrefix}`;
+		const url = `http://localhost:${PORT}${pathPrefix}`;
 		const headers = {};
+
+		// Include saved cookies in request
+		const cookieHeader = Object.entries(cookieJar)
+			.map(([name, value]) => `${name}=${value}`)
+			.join("; ");
+		if (cookieHeader) headers["Cookie"] = cookieHeader;
+
 		if (method.toUpperCase() === "POST" || method.toUpperCase() === "PUT") {
 			headers["content-type"] =
 				contentType.trim() === "" ? "text/plain; charset=utf-8" : contentType;
@@ -41,8 +49,21 @@ async function main() {
 				headers,
 				body: data,
 			});
+
+			// Store cookies from response
+			const setCookie = result.headers.get("set-cookie");
+			if (setCookie) {
+				// If multiple cookies, split by comma (simple handling)
+				setCookie.split(",").forEach((cookieStr) => {
+					const [pair] = cookieStr.split(";");
+					const [name, value] = pair.split("=");
+					cookieJar[name.trim()] = value.trim();
+				});
+			}
+
 			const text = await result.text();
 			console.log("Response:", text);
+			console.log("Saved cookies:", cookieJar);
 		} catch (err) {
 			console.error("Fetch error:", err);
 		}
