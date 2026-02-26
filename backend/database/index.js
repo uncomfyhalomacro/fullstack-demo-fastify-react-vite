@@ -1,8 +1,8 @@
-import { Sequelize } from "sequelize";
 import { loadEnvFile } from "node:process";
+import { Sequelize } from "sequelize";
 
 loadEnvFile();
-const PROD = process.env.PROD || "dev";
+const PROD = process.env.PROD || "prod";
 const PG_DB = process.env.PG_DB || "db";
 const PG_USER = process.env.PG_USER || "";
 const PG_PASSWORD = process.env.PG_PASSWORD || "";
