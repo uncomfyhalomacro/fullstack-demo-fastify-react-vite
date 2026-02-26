@@ -1,10 +1,11 @@
 import { DataTypes, Model } from "sequelize";
 import { sequelize } from "../database/index.js";
+import UserModel from "../models/UserModel.js";
 
-class UserModel extends Model {}
+class ProductModel extends Model {}
 
-const userModelInit = async () => {
-	UserModel.init(
+const productModelInit = async () => {
+	ProductModel.init(
 		{
 			id: {
 				type: DataTypes.UUID,
@@ -12,29 +13,39 @@ const userModelInit = async () => {
 				primaryKey: true,
 				defaultValue: DataTypes.UUIDV4,
 			},
-			username: {
+			user_id: {
+				type: DataTypes.UUID,
+				allowNull: false,
+				references: {
+					model: UserModel,
+					key: "id",
+				},
+			},
+			name: {
 				type: DataTypes.STRING,
 				allowNull: false,
 				unique: true,
 			},
-			contact_number: {
-				type: DataTypes.STRING,
+			price: {
+				type: DataType.DECIMAL,
 				allowNull: false,
-				unique: true,
+				validate: {
+					min: 1,
+				},
+				defaultValue: 1,
 			},
-			email: {
+			type: {
 				type: DataTypes.STRING,
-				allowNull: false,
-				unique: true,
+				allowNull: true,
+				defaultValue: "product", // or "service"
 			},
-			hashed_password: {
-				type: DataTypes.STRING,
+			count: {
+				type: DataTypes.BIGINT,
 				allowNull: false,
-			},
-			role: {
-				type: DataTypes.STRING,
-				allowNull: false,
-				defaultValue: "seller",
+				validate: {
+					min: 0,
+				},
+				defaultValue: 0,
 			},
 			createdAt: {
 				type: DataTypes.DATE,
@@ -50,13 +61,13 @@ const userModelInit = async () => {
 		{
 			// Other model options go here
 			sequelize, // We need to pass the connection instance
-			modelName: "users", // We need to choose the model name
+			modelName: "products", // We need to choose the model name
 		},
 	);
 };
 
-await userModelInit();
+await productModelInit();
 
-export default UserModel;
+export default ProductModel;
 
-export { userModelInit };
+export { productModelInit };

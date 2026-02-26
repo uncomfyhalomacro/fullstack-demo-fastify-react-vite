@@ -1,4 +1,4 @@
-import { verifyJwt } from "../services/auth.jwt.js";
+import { verifyJwt } from "../../services/auth/jwt.js";
 
 async function handleProtectedWithLogin(request, response, handlerFunc) {
 	try {

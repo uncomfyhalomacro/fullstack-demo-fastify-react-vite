@@ -1,6 +1,6 @@
 import { hash, verify } from "@node-rs/argon2";
 import { randomBytes } from "node:crypto";
-import UserModel from "../models/UserModel.js";
+import UserModel from "../../models/UserModel.js";
 
 const login = async (username, password) => {
 	if (!username || username.trim() === "") {

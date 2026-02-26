@@ -1,5 +1,5 @@
-import { generateJwt } from "../services/auth.jwt.js";
-import { login } from "../services/auth.services.js";
+import { login } from "../../services/auth/core.js";
+import { generateJwt } from "../../services/auth/jwt.js";
 
 const loginHandler = async (req, res) => {
 	const { username, password } = req.body;

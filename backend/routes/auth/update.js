@@ -1,4 +1,4 @@
-import { update } from "../services/auth.services.js";
+import { update } from "../../services/auth/core.js";
 
 const updateHandler = async (req, res, sessionData) => {
 	const { newUsername, newPassword } = req.body;

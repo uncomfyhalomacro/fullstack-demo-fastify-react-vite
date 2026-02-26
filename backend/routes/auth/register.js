@@ -1,4 +1,4 @@
-import { register } from "../services/auth.services.js";
+import { register } from "../../services/auth/core.js";
 
 const registerHandler = async (req, res) => {
 	const { username, password, email, contact_number } = req.body;

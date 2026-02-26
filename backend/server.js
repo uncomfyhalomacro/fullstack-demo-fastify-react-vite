@@ -2,10 +2,10 @@ import fastifyCookie from "@fastify/cookie";
 import cors from "@fastify/cors";
 import Fastify from "fastify";
 import { loadEnvFile } from "node:process";
-import handleProtectedWithLogin from "./middleware/protected.login.js";
-import { loginHandler } from "./routes/auth.login.js";
-import { registerHandler } from "./routes/auth.register.js";
-import { updateHandler } from "./routes/auth.update.js";
+import handleProtectedWithLogin from "./middleware/protect/login.js";
+import { loginHandler } from "./routes/auth/login.js";
+import { registerHandler } from "./routes/auth/register.js";
+import { updateHandler } from "./routes/auth/update.js";
 
 loadEnvFile();
 
@@ -31,9 +31,9 @@ fastify.get("/healthz", async (_, resp) => {
     return resp.code(200).send("OK")
 })
 
-fastify.post("/register", registerHandler);
-fastify.post("/login", loginHandler);
-fastify.put("/update", async (req, resp) => {
+fastify.post("/auth/register", registerHandler);
+fastify.post("/auth/login", loginHandler);
+fastify.put("/auth/update", async (req, resp) => {
 	await handleProtectedWithLogin(req, resp, updateHandler);
 });
 
