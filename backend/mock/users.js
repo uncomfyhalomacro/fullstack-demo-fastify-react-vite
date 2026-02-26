@@ -5,7 +5,7 @@ import { fileURLToPath } from "node:url";
 import { faker } from "@faker-js/faker";
 import { sequelize } from "../database/index.js";
 import UserModel from "../models/UserModel.js";
-import { register } from "../services/auth.services.js";
+import { register } from "../services/auth/core.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
