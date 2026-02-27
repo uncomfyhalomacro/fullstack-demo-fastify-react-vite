@@ -13,6 +13,7 @@ import { handlerUserLogin } from "./routes/auth/login.js";
 import { handlerUserRegister } from "./routes/auth/register.js";
 import { handlerUserUpdate } from "./routes/auth/update.js";
 import { handlerUpdateProductInfo } from "./routes/products/update.js";
+import { verifyJwt } from "./services/auth/jwt.js";
 
 loadEnvFile();
 
@@ -29,9 +30,11 @@ fastify.register(fastifyCookie, {
 
 fastify.register(cors, {
 	strictPreflight: true,
-	origin: PROD === "dev" ? "http://localhost:8080" : "",
+	origin:
+		PROD === "dev" ? ["http://localhost:8080", "http://localhost:5173"] : [], // TODO: add an env
 	methods: ["GET", "HEAD", "POST", "DELETE", "PUT", "PATCH"],
 	allowedHeaders: ["Content-Type", "Authorization"],
+	credentials: true,
 });
 
 fastify.get("/healthz", async (_, resp) => {
@@ -86,6 +89,20 @@ fastify.post("/auth/user/login", handlerUserLogin);
 fastify.put("/auth/user/update", async (req, resp) => {
 	await handleProtectedWithLogin(req, resp, handlerUserUpdate);
 	return;
+});
+
+fastify.get("/auth/user/profile", async (request, reply) => {
+	try {
+		const decoded = await verifyJwt({ token: request.cookies.session });
+		return reply.send({
+			username: decoded.username,
+			email: decoded.email,
+			role: decoded.role,
+		});
+	} catch (err) {
+		console.error(err);
+		return reply.status(401).send({ message: "Unauthorized" }); // Token is invalid
+	}
 });
 
 try {
