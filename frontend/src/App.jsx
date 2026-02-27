@@ -1,9 +1,7 @@
-import { useState } from "react";
-import viteLogo from "/vite.svg";
-import reactLogo from "./assets/react.svg";
+import { useState, useEffect } from "react";
 import "./App.css";
-import { Trans, useTranslation } from "react-i18next";
-import i18n from "./i18n";
+import LoginPage from "./pages/LoginPage.jsx";
+import { fetchUserProfile } from "./api/auth/profile.js";
 
 const lngs = {
 	en: { nativeName: "English" },
@@ -11,47 +9,40 @@ const lngs = {
 };
 
 function App() {
-	const { t } = useTranslation();
-	const [count, setCount] = useState(0);
+	const [user, setUser] = useState(null);
+	const [loading, setLoading] = useState(true);
+
+	useEffect(() => {
+		const checkAuth = async () => {
+			try {
+				const user = await fetchUserProfile();
+				setUser(user);
+			} catch (error) {
+				console.error(error.message);
+			} finally {
+				setLoading(false);
+			}
+		};
+
+		checkAuth();
+	}, []);
+
+	if (loading) {
+		return <div>Loading...</div>;
+	}
 
 	return (
-		<>
-			<div>
-				<a href="https://vite.dev" target="_blank" rel="noopener">
-					<img src={viteLogo} className="logo" alt="Vite logo" />
-				</a>
-				<a href="https://react.dev" target="_blank" rel="noopener">
-					<img src={reactLogo} className="logo react" alt="React logo" />
-				</a>
-			</div>
-			<h1>Vite + React</h1>
-			<div className="card">
-				<div>
-					{Object.keys(lngs).map((lng) => (
-						<button
-							key={lng}
-							style={{
-								fontWeight: i18n.resolvedLanguage === lng ? "bold" : "normal",
-							}}
-							type="submit"
-							onClick={() => i18n.changeLanguage(lng)}
-						>
-							{lngs[lng].nativeName}
-						</button>
-					))}
-				</div>
-				<button type="button" onClick={() => setCount((count) => count + 1)}>
-					<Trans i18nKey="description.count">count is</Trans>
-					{` ${count}`}
-				</button>
-				<p>
-					Edit <code>src/App.jsx</code> and save to test HMR
-				</p>
-			</div>
-			<p className="read-the-docs">
-				Click on the Vite and React logos to learn more
-			</p>
-		</>
+		<div>
+			{!user ? (
+				<LoginPage onLogin={setUser} />
+			) : (
+				<>
+					<h2>Welcome, {user.username}</h2>
+					<h3>Email: {user.email}</h3>
+					<h4>Role: {user.role}</h4>
+				</>
+			)}
+		</div>
 	);
 }
 
