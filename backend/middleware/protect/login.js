@@ -21,7 +21,8 @@ async function handleProtectedWithLoginWithRoleCheck(
 	const sessionData = await verifyJwt({ token: request.cookies.session });
 	const role = sessionData.role ?? "unknown";
 	try {
-		roleCheck(role);
+		roleCheck(role)
+		roleCheck(targetRole)
 		// Use role afterwards
 		if (role === targetRole) {
 			if (targetRole === "seller") {
