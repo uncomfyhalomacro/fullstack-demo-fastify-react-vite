@@ -36,20 +36,22 @@ fastify.get("/healthz", async (_, resp) => {
 	return resp.code(200).send("OK");
 });
 
-fastify.post("/products/:user_id", async (req, resp) => {
+fastify.post("/:role/products/:user_id", async (req, resp) => {
+	const { role } = req.params;
 	await handleProtectedWithLoginWithRoleCheck(
 		req,
 		resp,
-		"seller",
+		role ?? "unknown",
 		handlerAddProduct,
 	);
 });
 
-fastify.delete("/products/:user_id/:id", async (req, resp) => {
+fastify.delete("/:role/products/:user_id/:id", async (req, resp) => {
+	const { role } = req.params;
 	await handleProtectedWithLoginWithRoleCheck(
 		req,
 		resp,
-		"seller",
+		role ?? "unknown",
 		handlerRemoveProduct,
 	);
 });
