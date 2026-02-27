@@ -14,7 +14,9 @@ const handlerUserLogin = async (req, res) => {
 			});
 			res.setCookie("session", jwtToken, { secure: true });
 			return res.code(200).send({
-				message: "User has logged in",
+				email,
+				username,
+				role,
 			});
 		} else {
 			return res.code(401).send({ message: "Unauthorized" });
