@@ -3,12 +3,12 @@ import {
 	incrementProductByIdAndUserId,
 } from "../../services/product/core.js";
 
-const handlerIncrementDecrement = async (req, resp, user_id) => {
-	const { id, inc_dec_opt, rawValue } = req.params;
+const handlerIncrementDecrement = async (req, resp) => {
+	const { id, user_id, inc_dec_opt, rawValue } = req.params;
 	const count = Number(rawValue);
 	if (Number.isNaN(count)) {
-		req.code(402);
-		return req.send({ message: "value is not a number" });
+		resp.code(402);
+		return resp.send({ message: "value is not a number" });
 	}
 	try {
 		switch (inc_dec_opt) {
@@ -27,13 +27,13 @@ const handlerIncrementDecrement = async (req, resp, user_id) => {
 				});
 				return resp.send({ message: `successfully decremented by ${count}` });
 			default:
-				req.code(400);
-				return req.send({ message: `unknown operation ${inc_dec_opt}` });
+				resp.code(400);
+				return resp.send({ message: `unknown operation ${inc_dec_opt}` });
 		}
 	} catch (error) {
 		console.error(error);
-		req.code(501);
-		return req.send({ message: error.message });
+		resp.code(501);
+		return resp.send({ message: error.message });
 	}
 };
 
