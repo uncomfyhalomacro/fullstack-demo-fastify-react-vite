@@ -1,7 +1,27 @@
 import isSafeNumber from "../../helpers/isSafeNumber.js";
 import ProductModel from "../../models/ProductModel.js";
 
-const addProductByUserId = async ({ name, price, type, user_id }) => {
+const getProductsByUserId = async ({ user_id }) => {
+	if (!user_id || user_id.trim() === "") {
+		throw new Error("user_id is missing");
+	}
+
+	return await ProductModel.findAll({
+		where: {
+			user_id: user_id,
+		},
+	});
+};
+
+const addProductByUserId = async ({
+	user_id,
+	name,
+	in_price,
+	price,
+	type,
+	description,
+	unit,
+}) => {
 	if (!name || name.trim() === "") {
 		throw new Error("name is missing");
 	}
@@ -12,20 +32,39 @@ const addProductByUserId = async ({ name, price, type, user_id }) => {
 	if (cprice === 0) {
 		throw new Error("price cannot be zero");
 	}
+	if (!isSafeNumber(cprice) || !Number.isSafeInteger(cprice))
+		throw new Error("price number has exceeded safe limits");
+
+	if (!in_price) {
+		throw new Error("in_price is missing");
+	}
+	const cin_price = Number(in_price);
+	if (cin_price === 0) {
+		throw new Error("in_price cannot be zero");
+	}
+	if (!isSafeNumber(cin_price) || !Number.isSafeInteger(cin_price))
+		throw new Error("in_price number has exceeded safe limits");
+
 	if (!type || type.trim() === "") {
 		throw new Error("type is missing");
 	}
 	if (!user_id || user_id.trim() === "") {
 		throw new Error("user_id is missing");
 	}
-	if (!isSafeNumber(cprice) || !Number.isSafeInteger(cprice))
-		throw new Error("price number has exceeded safe limits");
-	await ProductModel.create({
-		name,
-		price: cprice,
-		type,
-		user_id,
-	});
+	if (!unit || unit.trim() === "") {
+		throw new Error("unit is missing");
+	}
+	await ProductModel.create(
+		{
+			user_id,
+			name,
+			in_price,
+			price,
+			type,
+			description,
+			unit,
+		},
+	);
 };
 
 const incrementProductByIdAndUserId = async ({ id, user_id, count }) => {
@@ -200,6 +239,7 @@ const updateProductPriceByIdAndUserId = async ({ id, user_id, price }) => {
 
 export {
 	addProductByUserId,
+	getProductsByUserId,
 	decrementProductByIdAndUserId,
 	incrementProductByIdAndUserId,
 	removeProductByIdAndUserId,

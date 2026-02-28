@@ -14,6 +14,10 @@ import { handlerUserRegister } from "./routes/auth/register.js";
 import { handlerUserUpdate } from "./routes/auth/update.js";
 import { handlerUpdateProductInfo } from "./routes/products/update.js";
 import { verifyJwt } from "./services/auth/jwt.js";
+import {
+	handlerGetProductsByUserID,
+	handlerGetProductsByUserIDFromPath,
+} from "./routes/products/get.js";
 
 loadEnvFile();
 
@@ -84,6 +88,25 @@ fastify.delete("/:role/products/:user_id/:id", async (req, resp) => {
 	);
 });
 
+fastify.get("/:role/products", async (req, resp) => {
+	const { role } = req.params;
+	await handleProtectedWithLoginWithRoleCheck(
+		req,
+		resp,
+		role ?? "unknown",
+		handlerGetProductsByUserID,
+	);
+});
+
+fastify.get("/:role/products/:user_id", async (req, resp) => {
+	const { role } = req.params;
+	await handleProtectedWithLoginWithRoleCheck(
+		req,
+		resp,
+		role ?? "unknown",
+		handlerGetProductsByUserIDFromPath,
+	);
+});
 fastify.post("/auth/user/register", handlerUserRegister);
 fastify.post("/auth/user/login", handlerUserLogin);
 fastify.put("/auth/user/update", async (req, resp) => {

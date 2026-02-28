@@ -1,58 +1,61 @@
+import { insertUnitSystem } from "../../helpers/insertUnitSystem.js";
 import ProductModel from "../../models/ProductModel.js";
 
 const handlerUpdateProductInfo = async (req, resp) => {
-	const { name, price, type } = req.body;
+	const { name, in_price, price, type, description, unit } = req.body;
 	const { id, user_id } = req.params;
 
-	const updates = {};
+	const product = await ProductModel.findOne({ where: { id, user_id } });
+
+	if (!product) {
+		return resp.code(404).send({ message: "Product not found" });
+	}
+
+	if (description !== undefined) product.description = description;
+	if (unit !== undefined) product.unit = unit;
+	insertUnitSystem(product); // NOTE: we have to do this because Sequelize `.update` method does not execute hooks
 
 	if (name !== undefined) {
 		if (!name.trim()) {
-			return resp.code(400).send({
-				message: "name cannot be empty",
-			});
+			return resp.code(400).send({ message: "name cannot be empty" });
 		}
-		updates.name = name.trim();
+		product.name = name.trim();
 	}
 
 	if (type !== undefined) {
 		if (!type.trim()) {
-			return resp.code(400).send({
-				message: "type cannot be empty",
-			});
+			return resp.code(400).send({ message: "type cannot be empty" });
 		}
-		updates.type = type.trim();
+		product.type = type.trim();
 	}
 
 	if (price !== undefined) {
 		const cprice = Number(price);
-
-		if (!Number.isFinite(cprice)) {
-			return resp.code(400).send({
-				message: "price must be a number",
-			});
-		}
-
-		if (!Number.isSafeInteger(cprice) || cprice <= 0) {
+		if (
+			!Number.isFinite(cprice) ||
+			!Number.isSafeInteger(cprice) ||
+			cprice <= 0
+		) {
 			return resp.code(400).send({ message: "invalid price value" });
 		}
-
-		updates.price = cprice;
+		product.price = cprice;
 	}
 
-	if (Object.keys(updates).length === 0) {
-		return resp.code(400).send({ message: "nothing to update" });
+	if (in_price !== undefined) {
+		const cin_price = Number(in_price);
+		if (
+			!Number.isFinite(cin_price) ||
+			!Number.isSafeInteger(cin_price) ||
+			cin_price <= 0
+		) {
+			return resp.code(400).send({ message: "invalid in_price value" });
+		}
+		product.in_price = cin_price;
 	}
 
-	const [updatedRows] = await ProductModel.update(updates, {
-		where: { id, user_id },
-	});
+	product.updatedAt = new Date();
 
-	if (updatedRows === 0) {
-		return resp.code(404).send({
-			message: "product does not exist",
-		});
-	}
+	await product.save();
 
 	return resp.send({
 		message: `successfully updated product with id ${id}`,

@@ -59,7 +59,7 @@ const update = async (id, username, { newUsername, newPassword }) => {
 		};
 
 		const hashed_password = await hash(newPassword, options);
-		await user.update({ hashed_password: hashed_password });
+		await user.update({ hashed_password: hashed_password, updatedAt: new Date()});
 		hasReplacedPassword = true;
 	}
 	return { hasReplacedPassword, hasReplacedUsername };

@@ -1,6 +1,8 @@
 import { DataTypes, Model } from "sequelize";
+import unit from "unitmath";
 import { sequelize } from "../database/index.js";
 import UserModel from "../models/UserModel.js";
+import { insertUnitSystem } from "../helpers/insertUnitSystem.js";
 
 class ProductModel extends Model {}
 
@@ -24,6 +26,7 @@ const productModelInit = async () => {
 			name: {
 				type: DataTypes.STRING,
 				allowNull: false,
+				unique: false,
 			},
 			description: {
 				type: DataTypes.STRING,
@@ -45,9 +48,19 @@ const productModelInit = async () => {
 				},
 				defaultValue: 1,
 			},
+			unit_system: {
+				type: DataTypes.STRING,
+				allowNull: true,
+			},
 			unit: {
 				type: DataTypes.STRING,
 				allowNull: true,
+				validate: {
+					isValidUnit(value) {
+						if (!value) return;
+						if (!unit.exists(value)) throw new Error("Invalid unit");
+					},
+				},
 			},
 			type: {
 				type: DataTypes.STRING,
@@ -78,9 +91,11 @@ const productModelInit = async () => {
 			},
 		},
 		{
-			// Other model options go here
-			sequelize, // We need to pass the connection instance
-			modelName: "products", // We need to choose the model name
+			sequelize,
+			modelName: "products",
+			hooks: {
+				afterValidate: insertUnitSystem,
+			},
 		},
 	);
 };
