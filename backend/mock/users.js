@@ -15,7 +15,7 @@ const PROD = process.env.PROD || "dev";
 
 const users = Array.from({ length: 100 }, () => ({
 	username: faker.internet.username(),
-	contact_number: faker.phone.number(),
+	contact_number: faker.phone.number({ style: "international" }),
 	email: faker.internet.email(),
 	password: faker.internet.password(),
 }));
@@ -29,20 +29,27 @@ async function resetTable() {
 
 async function generateMockUsers() {
 	console.warn("Dropping user table");
-	const pathToUserJson = `${__dirname}/users.json`;
-	const jsonData = JSON.stringify(users, null, "\t");
-	await writeFile(pathToUserJson, jsonData);
 	const results = await Promise.allSettled(
-		users.map((user) => {
-			return register(
+		users.map(async (user) => {
+			await register(
 				user.username,
 				user.password,
 				user.email,
 				user.contact_number,
 			);
+			return user;
 		}),
 	);
 	console.log(results);
+	const pathToUserJson = `${__dirname}/users.json`;
+	const jsonData = JSON.stringify(
+		results
+			.filter((result) => result.status === "fulfilled")
+			.map((result) => result.value),
+		null,
+		"\t",
+	);
+	await writeFile(pathToUserJson, jsonData);
 	return results;
 }
 
