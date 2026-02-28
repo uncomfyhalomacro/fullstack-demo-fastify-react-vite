@@ -25,6 +25,10 @@ const productModelInit = async () => {
 				type: DataTypes.STRING,
 				allowNull: false,
 			},
+			description: {
+				type: DataTypes.STRING,
+				allowNull: true,
+			},
 			in_price: {
 				type: DataTypes.DECIMAL,
 				allowNull: false,
@@ -41,6 +45,10 @@ const productModelInit = async () => {
 				},
 				defaultValue: 1,
 			},
+			unit: {
+				type: DataTypes.STRING,
+				allowNull: true,
+			},
 			type: {
 				type: DataTypes.STRING,
 				allowNull: true,
@@ -50,6 +58,7 @@ const productModelInit = async () => {
 				defaultValue: "product", // or "service"
 			},
 			count: {
+				// NOTE: aliased as in stock in client
 				type: DataTypes.BIGINT,
 				allowNull: false,
 				validate: {
