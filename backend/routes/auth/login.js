@@ -1,3 +1,4 @@
+import { PROD } from "../../env.js";
 import { login } from "../../services/auth/core.js";
 import { generateJwt } from "../../services/auth/jwt.js";
 
@@ -12,19 +13,22 @@ const handlerUserLogin = async (req, res) => {
 				email,
 				username,
 			});
-			res.setCookie("session", jwtToken, {
-				secure: true,
-				httpOnly: true,
-				sameSite: "Strict",
-				maxAge: 3600 * 1000,
-			});
-			return res.code(200).send({
-				email,
-				username,
-				role,
-			});
+			return res
+				.setCookie("session", jwtToken, {
+					path: "/",
+					secure: PROD === "prod",
+					httpOnly: true,
+					sameSite: PROD === "prod" ? "Strict" : "Lax",
+					maxAge: 3600 * 1000,
+				})
+				.code(200)
+				.send({
+					email,
+					username,
+					role,
+				});
 		} else {
-			return res.code(401).send({ message: "Unauthorized" });
+			return res.code(401).send({ message: "unauthorized" });
 		}
 	} catch (error) {
 		console.error(error);

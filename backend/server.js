@@ -6,24 +6,23 @@ import {
 	handleProtectedWithLogin,
 	handleProtectedWithLoginWithRoleCheck,
 } from "./middleware/protect/login.js";
-import { handlerAddProduct } from "./routes/products/add.js";
-import { handlerRemoveProduct } from "./routes/products/remove.js";
-import { handlerIncrementDecrement } from "./routes/products/increment-decrement.js";
 import { handlerUserLogin } from "./routes/auth/login.js";
 import { handlerUserRegister } from "./routes/auth/register.js";
 import { handlerUserUpdate } from "./routes/auth/update.js";
-import { handlerUpdateProductInfo } from "./routes/products/update.js";
-import { verifyJwt } from "./services/auth/jwt.js";
+import { handlerAddProduct } from "./routes/products/add.js";
 import {
 	handlerGetProductsByUserID,
 	handlerGetProductsByUserIDFromPath,
 } from "./routes/products/get.js";
-import { type } from "node:os";
+import { handlerIncrementDecrement } from "./routes/products/increment-decrement.js";
+import { handlerRemoveProduct } from "./routes/products/remove.js";
+import { handlerUpdateProductInfo } from "./routes/products/update.js";
+import { verifyJwt } from "./services/auth/jwt.js";
+import { PROD } from "./env.js";
 
 loadEnvFile();
 
 const PORT = process.env.PORT || 3000;
-const PROD = process.env.PROD || "prod";
 const COOKIE_SECRET = process.env.COOKIE_SECRET || "cookie-secret";
 const fastify = Fastify({
 	logger: true,
@@ -40,6 +39,20 @@ await fastify.register(import("@fastify/swagger"), {
 			description: "Testing the Fastify swagger API",
 			version: "0.1.0",
 		},
+		components: {
+			securitySchemes: {
+				cookieAuth: {
+					in: "cookie",
+					type: "apiKey",
+					name: "session",
+				},
+			},
+		},
+		security: [
+			{
+				cookieAuth: [],
+			},
+		],
 	},
 });
 await fastify.register(import("@fastify/swagger-ui"), {
@@ -77,15 +90,33 @@ fastify.get("/healthz", async (_, resp) => {
 	return resp.code(200).send("OK");
 });
 
-fastify.post("/:role/products/:user_id", async (req, resp) => {
-	const { role } = req.params;
-	await handleProtectedWithLoginWithRoleCheck(
-		req,
-		resp,
-		role ?? "unknown",
-		handlerAddProduct,
-	);
-});
+fastify.post(
+	"/:role/products/:user_id",
+	{
+		schema: {
+			body: {
+				type: "object",
+				properties: {
+					name: { type: "string" },
+					in_price: { type: "number" },
+					price: { type: "number" },
+					description: { type: "string" },
+					type: { type: "string" },
+					unit: { type: "string" },
+				},
+			},
+		},
+	},
+	async (req, resp) => {
+		const { role } = req.params;
+		await handleProtectedWithLoginWithRoleCheck(
+			req,
+			resp,
+			role ?? "unknown",
+			handlerAddProduct,
+		);
+	},
+);
 
 fastify.put(
 	"/:role/products/:user_id/:id/:inc_dec_opt/:rawValue",
@@ -139,16 +170,91 @@ fastify.get("/:role/products/:user_id", async (req, resp) => {
 		handlerGetProductsByUserIDFromPath,
 	);
 });
-fastify.post("/auth/user/register", handlerUserRegister);
-fastify.post("/auth/user/login", handlerUserLogin);
-fastify.put("/auth/user/update", async (req, resp) => {
-	await handleProtectedWithLogin(req, resp, handlerUserUpdate);
-	return;
-});
+fastify.post(
+	"/auth/user/register",
+	{
+		schema: {
+			body: {
+				type: "object",
+				properties: {
+					username: { type: "string" },
+					password: { type: "string" },
+					email: { type: "string" },
+					contact_number: { type: "string" },
+				},
+			},
+		},
+	},
+	handlerUserRegister,
+);
+fastify.post(
+	"/auth/user/login",
+	{
+		schema: {
+			security: [],
+			response: {
+				200: {
+					description: "Successful Login",
+					headers: {
+						"Set-Cookie": {
+							type: "string",
+							description: "Authentication cookie",
+						},
+					},
+					type: "object",
+					properties: {
+						username: { type: "string" },
+						email: { type: "string" },
+						role: { type: "string" },
+					},
+				},
+			},
+			body: {
+				type: "object",
+				properties: {
+					username: { type: "string" },
+					password: { type: "string" },
+				},
+			},
+		},
+	},
+	handlerUserLogin,
+);
+fastify.put(
+	"/auth/user/update",
+	{
+		schema: {
+			description:
+				"Updates user information. Updating either username and password will require a relogin since the authentication cookie is invalidated",
+			// cookies: {
+			// 	type: "string",
+			// 	properties: {
+			// 		session: { type: "string" },
+			// 	},
+			// },
+			security: [{ cookieAuth: [] }],
+			body: {
+				type: "object",
+				properties: {
+					newUsername: { type: "string" },
+					newPassword: { type: "string" },
+					newContactNumber: { type: "string" },
+					newEmail: { type: "string" },
+				},
+			},
+		},
+	},
+	async (req, resp) => {
+		await handleProtectedWithLogin(req, resp, handlerUserUpdate);
+		return;
+	},
+);
 
 fastify.get("/auth/user/profile", async (request, reply) => {
 	try {
-		const decoded = await verifyJwt({ token: request.cookies.session });
+		const decoded = await verifyJwt({
+			token: request.cookies.session,
+		});
 		return reply.send({
 			username: decoded.username,
 			email: decoded.email,
@@ -156,7 +262,7 @@ fastify.get("/auth/user/profile", async (request, reply) => {
 		});
 	} catch (err) {
 		console.error(err);
-		return reply.status(401).send({ message: "Unauthorized" }); // Token is invalid
+		return reply.status(401).send({ message: "unauthorized" }); // Token is invalid
 	}
 });
 
