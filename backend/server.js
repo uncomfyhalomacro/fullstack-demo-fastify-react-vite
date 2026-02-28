@@ -32,8 +32,17 @@ const fastify = Fastify({
 fastify.register(fastifyCookie, {
 	secret: COOKIE_SECRET,
 });
-fastify.register(import("@fastify/swagger"));
-fastify.register(import("@fastify/swagger-ui"), {
+await fastify.register(import("@fastify/swagger"), {
+	openapi: {
+		openapi: "3.0.0",
+		info: {
+			title: "Test swagger",
+			description: "Testing the Fastify swagger API",
+			version: "0.1.0",
+		},
+	},
+});
+await fastify.register(import("@fastify/swagger-ui"), {
 	routePrefix: "/documentation",
 	uiConfig: {
 		docExpansion: "full",
@@ -64,7 +73,7 @@ fastify.register(cors, {
 	credentials: true,
 });
 
-await fastify.get("/healthz", async (_, resp) => { // we await
+fastify.get("/healthz", async (_, resp) => {
 	return resp.code(200).send("OK");
 });
 
