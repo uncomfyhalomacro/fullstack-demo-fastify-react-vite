@@ -1,5 +1,7 @@
 import { DataTypes, Model } from "sequelize";
 import { sequelize } from "../database/index.js";
+import { AsYouType } from "libphonenumber-js";
+import { insertCountryCodeFromContactNumber } from "../helpers/insertCountryCodeFromContactNumber.js";
 
 class UserModel extends Model {}
 
@@ -17,10 +19,26 @@ const userModelInit = async () => {
 				allowNull: false,
 				unique: true,
 			},
+			country_calling_code: {
+				type: DataTypes.STRING,
+				allowNull: true,
+			},
 			contact_number: {
 				type: DataTypes.STRING,
 				allowNull: false,
 				unique: true,
+				validate: {
+					isValidNumber(value) {
+						if (!value) return;
+						try {
+							const asYouType = new AsYouType();
+							asYouType.input(value);
+							if (!asYouType.isValid()) throw new Error("Invalid number");
+						} catch (err) {
+							throw new Error(`${err.message}`);
+						}
+					},
+				},
 			},
 			email: {
 				type: DataTypes.STRING,
@@ -54,9 +72,11 @@ const userModelInit = async () => {
 			},
 		},
 		{
-			// Other model options go here
-			sequelize, // We need to pass the connection instance
-			modelName: "users", // We need to choose the model name
+			sequelize,
+			modelName: "users",
+			hooks: {
+				afterValidate: insertCountryCodeFromContactNumber,
+			},
 		},
 	);
 };
