@@ -25,6 +25,14 @@ const productModelInit = async () => {
 				type: DataTypes.STRING,
 				allowNull: false,
 			},
+			in_price: {
+				type: DataTypes.DECIMAL,
+				allowNull: false,
+				validate: {
+					min: 1,
+				},
+				defaultValue: 1,
+			},
 			price: {
 				type: DataTypes.DECIMAL,
 				allowNull: false,
