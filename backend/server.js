@@ -18,6 +18,7 @@ import {
 	handlerGetProductsByUserID,
 	handlerGetProductsByUserIDFromPath,
 } from "./routes/products/get.js";
+import { type } from "node:os";
 
 loadEnvFile();
 
@@ -31,6 +32,28 @@ const fastify = Fastify({
 fastify.register(fastifyCookie, {
 	secret: COOKIE_SECRET,
 });
+fastify.register(import("@fastify/swagger"));
+fastify.register(import("@fastify/swagger-ui"), {
+	routePrefix: "/documentation",
+	uiConfig: {
+		docExpansion: "full",
+		deepLinking: false,
+	},
+	uiHooks: {
+		onRequest: (request, reply, next) => {
+			next();
+		},
+		preHandler: (request, reply, next) => {
+			next();
+		},
+	},
+	staticCSP: true,
+	transformStaticCSP: (header) => header,
+	transformSpecification: (swaggerObject, request, reply) => {
+		return swaggerObject;
+	},
+	transformSpecificationClone: true,
+});
 
 fastify.register(cors, {
 	strictPreflight: true,
@@ -41,7 +64,7 @@ fastify.register(cors, {
 	credentials: true,
 });
 
-fastify.get("/healthz", async (_, resp) => {
+await fastify.get("/healthz", async (_, resp) => { // we await
 	return resp.code(200).send("OK");
 });
 
@@ -130,6 +153,8 @@ fastify.get("/auth/user/profile", async (request, reply) => {
 
 try {
 	await fastify.listen({ port: PORT });
+	await fastify.ready();
+	fastify.swagger();
 } catch (err) {
 	fastify.log.error(err);
 	process.exit(1);
