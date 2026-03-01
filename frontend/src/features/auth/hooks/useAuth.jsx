@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback } from "react";
 import { fetchUserProfile } from "../../../api/auth/profile.js";
 
 export const useAuth = () => {
-	const [user, setUser] = useState(null);
+	const [user, setUser] = useState(undefined);
 	const [loading, setLoading] = useState(true);
 	const [error, setError] = useState(null);
 
@@ -13,7 +13,7 @@ export const useAuth = () => {
 			setUser(userData);
 			setError(null);
 		} catch (err) {
-			setUser(null);
+			setUser(undefined);
 			setError(err);
 		} finally {
 			setLoading(false);

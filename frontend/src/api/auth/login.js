@@ -17,6 +17,7 @@ async function fetchLogin({ username, password }) {
 	const body = await response.json();
 	if (status === 200) {
 		return {
+    			id: body.id,
 			username: body.username,
 			role: body.role,
 			email: body.email,

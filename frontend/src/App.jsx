@@ -1,6 +1,9 @@
+import { useEffect } from "react";
 import "./App.css";
-import LoginPage from "./pages/LoginPage.jsx";
 import { useAuth } from "./features/auth/hooks/useAuth.jsx";
+import { ProductsTable } from "./features/products/components/Products.jsx";
+import { useGetProducts } from "./features/products/hooks/useGetProducts.jsx";
+import LoginPage from "./pages/LoginPage.jsx";
 
 const lngs = {
 	en: { nativeName: "English" },
@@ -8,9 +11,18 @@ const lngs = {
 };
 
 function App() {
-	const { user, setUser, loading } = useAuth();
+	const { user, setUser, loading: loadingUser } = useAuth();
+	const {
+		data: products,
+		isLoading: loadingProducts,
+		error,
+		refetch,
+	} = useGetProducts({
+		user_id: user?.id,
+		role: user?.role,
+	});
 
-	if (loading) {
+	if (loadingUser) {
 		return <div>Loading...</div>;
 	}
 
@@ -20,9 +32,19 @@ function App() {
 				<LoginPage onLogin={setUser} />
 			) : (
 				<>
+					<h1>ID: {user.id}</h1>
 					<h2>Welcome, {user.username}</h2>
 					<h3>Email: {user.email}</h3>
 					<h4>Role: {user.role}</h4>
+					{error === null ? (
+						<ProductsTable
+							refreshProducts={refetch}
+							products={products}
+							loadingProducts={loadingProducts}
+						/>
+					) : (
+						<div>Something went wrong when loading products data...</div>
+					)}
 				</>
 			)}
 		</div>
