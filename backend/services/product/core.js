@@ -51,17 +51,15 @@ const addProductByUserId = async ({
 	if (!user_id || user_id.trim() === "") {
 		throw new Error("user_id is missing");
 	}
-	await ProductModel.create(
-		{
-			user_id,
-			name,
-			in_price,
-			price,
-			type,
-			description,
-			unit,
-		},
-	);
+	await ProductModel.create({
+		user_id,
+		name,
+		in_price,
+		price,
+		type,
+		description,
+		unit,
+	});
 };
 
 const incrementProductByIdAndUserId = async ({ id, user_id, count }) => {

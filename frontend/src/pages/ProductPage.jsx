@@ -1,3 +1,1 @@
-
-function ShowProducts({role, user_id}) {
-}
+function ShowProducts({ role, user_id }) {}

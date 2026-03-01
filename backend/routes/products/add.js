@@ -5,7 +5,7 @@ const handlerAddProduct = async (req, resp) => {
 	const { name, in_price, price, type, description, unit } = req.body;
 	try {
 		await addProductByUserId({
-    			user_id,
+			user_id,
 			name,
 			in_price,
 			price,
