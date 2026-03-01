@@ -1,6 +1,6 @@
+import { AsYouType } from "libphonenumber-js";
 import { DataTypes, Model } from "sequelize";
 import { sequelize } from "../database/index.js";
-import { AsYouType } from "libphonenumber-js";
 import { insertCountryCodeFromContactNumber } from "../helpers/insertCountryCodeFromContactNumber.js";
 
 class UserModel extends Model {}

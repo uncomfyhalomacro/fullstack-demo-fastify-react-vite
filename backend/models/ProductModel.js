@@ -1,8 +1,8 @@
 import { DataTypes, Model } from "sequelize";
 import unit from "unitmath";
 import { sequelize } from "../database/index.js";
-import UserModel from "../models/UserModel.js";
 import { insertUnitSystem } from "../helpers/insertUnitSystem.js";
+import UserModel from "../models/UserModel.js";
 
 class ProductModel extends Model {}
 

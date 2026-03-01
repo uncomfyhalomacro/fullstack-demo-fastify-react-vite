@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { fetchUserProfile } from "../../../api/auth/profile.js";
 
 export const useAuth = () => {

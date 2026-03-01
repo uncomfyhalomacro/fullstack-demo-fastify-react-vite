@@ -1,4 +1,3 @@
-import { PROD } from "../../env.js";
 import { login } from "../../services/auth/core.js";
 import { generateJwt } from "../../services/auth/jwt.js";
 

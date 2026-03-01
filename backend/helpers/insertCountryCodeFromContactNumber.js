@@ -1,6 +1,6 @@
 import { AsYouType } from "libphonenumber-js";
 
-const insertCountryCodeFromContactNumber = (model, options) => {
+const insertCountryCodeFromContactNumber = (model, _options) => {
 	if (model.contact_number && typeof model.contact_number === "string") {
 		if (model.contact_number.trim() === "") {
 			model.country_calling_code = null;

@@ -5,7 +5,7 @@ const insertUnitSystem = (model) => {
 		try {
 			const u = unit(1, model.unit);
 			model.unit_system = u.getInferredSystem().toString();
-		} catch (err) {
+		} catch (_err) {
 			throw new Error(`Invalid unit: ${model.unit}`);
 		}
 	} else {

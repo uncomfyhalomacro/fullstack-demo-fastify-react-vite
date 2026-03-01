@@ -1,11 +1,10 @@
-import { useEffect } from "react";
 import "./App.css";
 import { useAuth } from "./features/auth/hooks/useAuth.jsx";
 import { ProductsTable } from "./features/products/components/Products.jsx";
 import { useGetProducts } from "./features/products/hooks/useGetProducts.jsx";
 import LoginPage from "./pages/LoginPage.jsx";
 
-const lngs = {
+const _lngs = {
 	en: { nativeName: "English" },
 	se: { nativeName: "Svenska" },
 };

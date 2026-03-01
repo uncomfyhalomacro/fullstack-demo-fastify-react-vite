@@ -1,6 +1,7 @@
 import fastifyCookie from "@fastify/cookie";
 import cors from "@fastify/cors";
 import Fastify from "fastify";
+import { COOKIE_SECRET, PORT, PROD } from "./env.js";
 import {
 	handleProtectedWithLogin,
 	handleProtectedWithLoginWithRoleCheck,
@@ -17,7 +18,6 @@ import { handlerIncrementDecrement } from "./routes/products/increment-decrement
 import { handlerRemoveProduct } from "./routes/products/remove.js";
 import { handlerUpdateProductInfo } from "./routes/products/update.js";
 import { verifyJwt } from "./services/auth/jwt.js";
-import { PROD, PORT, COOKIE_SECRET } from "./env.js";
 
 const fastify = Fastify({
 	logger: true,
@@ -57,16 +57,16 @@ await fastify.register(import("@fastify/swagger-ui"), {
 		deepLinking: false,
 	},
 	uiHooks: {
-		onRequest: (request, reply, next) => {
+		onRequest: (_request, _reply, next) => {
 			next();
 		},
-		preHandler: (request, reply, next) => {
+		preHandler: (_request, _reply, next) => {
 			next();
 		},
 	},
 	staticCSP: true,
 	transformStaticCSP: (header) => header,
-	transformSpecification: (swaggerObject, request, reply) => {
+	transformSpecification: (swaggerObject, _request, _reply) => {
 		return swaggerObject;
 	},
 	transformSpecificationClone: true,

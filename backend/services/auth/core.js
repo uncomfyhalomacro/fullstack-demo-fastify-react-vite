@@ -1,7 +1,7 @@
-import { hash, verify } from "@node-rs/argon2";
 import { randomBytes } from "node:crypto";
-import UserModel from "../../models/UserModel.js";
+import { hash, verify } from "@node-rs/argon2";
 import { insertCountryCodeFromContactNumber } from "../../helpers/insertCountryCodeFromContactNumber.js";
+import UserModel from "../../models/UserModel.js";
 
 const login = async (username, password) => {
 	if (!username || username.trim() === "") {
@@ -108,7 +108,7 @@ const register = async (username, password, email, contact_number) => {
 	}
 
 	// Check if user already exists
-	let user = await UserModel.findOne({ where: { username: username } });
+	const user = await UserModel.findOne({ where: { username: username } });
 
 	if (user) {
 		throw new Error("user already exists");
