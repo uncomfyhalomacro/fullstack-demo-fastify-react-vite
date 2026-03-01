@@ -251,6 +251,7 @@ fastify.get("/auth/user/profile", async (request, reply) => {
 			token: request.cookies.session,
 		});
 		return reply.send({
+    			id: decoded.id,
 			username: decoded.username,
 			email: decoded.email,
 			role: decoded.role,
