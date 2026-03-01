@@ -3,18 +3,18 @@ run-backend:
 run-frontend:
 	cd frontend && npm run dev
 
-[arg('flag', pattern='--write|--help')]
-format-backend flag='--help':
-	cd backend && biome format {{flag}}
+[arg('flag', pattern='--write|--help|')]
+check-backend flag='':
+	cd backend && biome check {{flag}}
 
-[arg('flag', pattern='--write|--help')]
-format-frontend flag='--help':
-	cd frontend && biome format {{flag}}
+[arg('flag', pattern='--write|--help|')]
+check-frontend flag='':
+	cd frontend && biome check {{flag}}
 
-[arg('flag', pattern='--write|--help')]
-format flag='--help':
+[arg('flag', pattern='--write|--help|')]
+check flag='':
 	#!/bin/bash
 
 	[[ "--help" == "{{flag}}" ]] && biome --help && exit 0
-	just format-frontend {{flag}}
-	just format-backend {{flag}}
+	just check-frontend {{flag}}
+	just check-backend {{flag}}
