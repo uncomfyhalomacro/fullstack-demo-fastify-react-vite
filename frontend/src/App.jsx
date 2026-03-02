@@ -1,16 +1,12 @@
 import "./App.css";
-import { useAuth } from "./features/auth/hooks/useAuth.jsx";
+import LoginForm from "./features/auth/components/LoginForm.jsx";
+import { useUser } from "./features/auth/hooks/useUser.jsx";
 import { ProductsTable } from "./features/products/components/Products.jsx";
 import { useGetProducts } from "./features/products/hooks/useGetProducts.jsx";
-import LoginPage from "./pages/LoginPage.jsx";
-
-const _lngs = {
-	en: { nativeName: "English" },
-	se: { nativeName: "Svenska" },
-};
 
 function App() {
-	const { user, setUser, loading: loadingUser } = useAuth();
+	const { data: user, isLoading } = useUser();
+
 	const {
 		data: products,
 		isLoading: loadingProducts,
@@ -21,28 +17,27 @@ function App() {
 		role: user?.role,
 	});
 
-	if (loadingUser) {
-		return <div>Loading...</div>;
-	}
+	if (isLoading) return <div>Loading...</div>;
 
 	return (
 		<div>
 			{!user ? (
-				<LoginPage onLogin={setUser} />
+				<LoginForm />
 			) : (
 				<>
 					<h1>ID: {user.id}</h1>
 					<h2>Welcome, {user.username}</h2>
 					<h3>Email: {user.email}</h3>
 					<h4>Role: {user.role}</h4>
-					{error === null ? (
+
+					{!error ? (
 						<ProductsTable
 							refreshProducts={refetch}
 							products={products}
 							loadingProducts={loadingProducts}
 						/>
 					) : (
-						<div>Something went wrong when loading products data...</div>
+						<div>Something went wrong...</div>
 					)}
 				</>
 			)}

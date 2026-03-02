@@ -1,29 +1,21 @@
 import { API_URL } from "../../env.js";
 
-async function fetchLogin({ username, password }) {
+async function fetchLogin(prevState, formData) {
+	const username = formData.get("username");
+	const password = formData.get("password");
 	const url = `${API_URL}/auth/user/login`;
-	const response = await fetch(url, {
+	const res = await fetch(url, {
 		method: "POST",
-		headers: {
-			"Content-Type": "application/json",
-		},
-		body: JSON.stringify({
-			username,
-			password,
-		}),
+		body: JSON.stringify({ username, password }),
+		headers: { "Content-Type": "application/json" },
 		credentials: "include",
 	});
-	const status = response.status;
-	const body = await response.json();
-	if (status === 200) {
-		return {
-			id: body.id,
-			username: body.username,
-			role: body.role,
-			email: body.email,
-		};
+
+	if (!res.ok) {
+		return { success: false };
 	}
-	throw new Error(body.message);
+
+	return { success: true };
 }
 
 export { fetchLogin };

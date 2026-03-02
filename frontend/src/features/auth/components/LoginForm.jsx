@@ -1,75 +1,38 @@
-import { useState } from "react";
-import { fetchLogin } from "../../../api/auth/login.js";
+import { useLogin } from "../hooks/useLogin.jsx";
 
-const LoginForm = ({ onLogin }) => {
-	const [username, setUsername] = useState("");
-	const [password, setPassword] = useState("");
-	const [error, setError] = useState("");
-	const [loading, setLoading] = useState(false);
+const LoginForm = () => {
+	const { mutate, isPending, error } = useLogin();
 
-	const handleSubmit = async (e) => {
+	const handleSubmit = (e) => {
 		e.preventDefault();
-		setError("");
 
-		if (!username || !password) {
-			setError("Username and password are required.");
-			return;
-		}
+		const formData = new FormData(e.target);
 
-		setLoading(true);
-		try {
-			const {
-				username: fetchedUsername,
-				email,
-				role,
-			} = await fetchLogin({
-				username,
-				password,
-			});
-			console.log(fetchedUsername, email, role);
-			onLogin?.({ username: fetchedUsername, email, role });
-		} catch (err) {
-			setError(err.message ?? "Login failed");
-		} finally {
-			setLoading(false);
-		}
+		mutate({
+			username: formData.get("username"),
+			password: formData.get("password"),
+		});
 	};
 
 	return (
-		<form onSubmit={handleSubmit} style={{ maxWidth: 300, margin: "auto" }}>
+		<form onSubmit={handleSubmit}>
 			<h2>Login</h2>
 
-			<div style={{ marginBottom: 10 }}>
-				<label htmlFor="username_input">Username</label>
-				<input
-					type="text"
-					value={username}
-					onChange={(e) => setUsername(e.target.value)}
-					required
-					style={{ width: "100%", padding: 5 }}
-				/>
+			<div>
+				<label htmlFor="username">Username</label>
+				<input name="username" type="text" required />
 			</div>
 
-			<div style={{ marginBottom: 10 }}>
-				<label htmlFor="password_input">Password</label>
-				<input
-					type="password"
-					value={password}
-					onChange={(e) => setPassword(e.target.value)}
-					required
-					style={{ width: "100%", padding: 5 }}
-				/>
+			<div>
+				<label htmlFor="password">Password</label>
+				<input name="password" type="password" required />
 			</div>
 
-			{error && <p style={{ color: "red" }}>{error}</p>}
-
-			<button
-				type="submit"
-				disabled={loading}
-				style={{ width: "100%", padding: 8 }}
-			>
-				{loading ? "Logging in..." : "Login"}
+			<button type="submit" disabled={isPending}>
+				{isPending ? "Logging in..." : "Login"}
 			</button>
+
+			{error && <p style={{ color: "red" }}>Login failed</p>}
 		</form>
 	);
 };
