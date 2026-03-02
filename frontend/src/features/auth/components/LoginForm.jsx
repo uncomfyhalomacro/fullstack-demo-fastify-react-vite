@@ -18,7 +18,6 @@ const LoginForm = ({ onLogin }) => {
 
 		setLoading(true);
 		try {
-			// Replace this with your real API call
 			const {
 				username: fetchedUsername,
 				email,
