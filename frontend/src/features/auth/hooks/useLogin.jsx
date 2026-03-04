@@ -7,7 +7,6 @@ export function useLogin() {
 	return useMutation({
 		mutationFn: fetchLogin,
 		onSuccess: () => {
-			// 🔥 refetch authenticated user
 			queryClient.invalidateQueries({ queryKey: ["user"] });
 		},
 	});
