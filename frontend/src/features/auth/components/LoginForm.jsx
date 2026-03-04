@@ -8,9 +8,9 @@ const LoginForm = () => {
 
 		const formData = new FormData(e.target);
 
-		mutate(formData)
+		mutate(formData);
 	};
-	console.log(error)
+	console.log(error);
 
 	return (
 		<form onSubmit={handleSubmit}>

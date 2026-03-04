@@ -3,7 +3,7 @@ export function Menu() {
 		<div>
 			<nav className="m-nav-section">
 				<h2>Menu</h2>
-				
+
 				<section>
 					<ul>
 						<li>Invoices</li>
