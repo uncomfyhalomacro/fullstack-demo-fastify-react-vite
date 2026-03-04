@@ -8,11 +8,9 @@ const LoginForm = () => {
 
 		const formData = new FormData(e.target);
 
-		mutate({
-			username: formData.get("username"),
-			password: formData.get("password"),
-		});
+		mutate(formData)
 	};
+	console.log(error)
 
 	return (
 		<form onSubmit={handleSubmit}>

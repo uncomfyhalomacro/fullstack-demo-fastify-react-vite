@@ -1,6 +1,7 @@
 import { API_URL } from "../../env.js";
 
-async function fetchLogin(prevState, formData) {
+async function fetchLogin(formData) {
+	if (!formData === undefined) return { success: false };
 	const username = formData.get("username");
 	const password = formData.get("password");
 	const url = `${API_URL}/auth/user/login`;

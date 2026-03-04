@@ -8,12 +8,32 @@ const RefreshProductButton = ({ refreshProducts }) => {
 
 const ProductsTable = ({ refreshProducts, products, loadingProducts }) => {
 	return (
-		<div>
-			<RefreshProductButton refreshProducts={refreshProducts} />
+		<>
 			{loadingProducts ? (
 				<div>Loading products...</div>
 			) : !products || products.length === 0 ? (
-				<>No products</>
+				<div className="table-container">
+					<table>
+						<thead>
+							<tr>
+								<th>Article ID</th>
+								<th>Name</th>
+								<th>Description</th>
+								<th>In Price</th>
+								<th>Price</th>
+								<th>In Stock</th>
+								<th>Unit</th>
+								<th>Type</th>
+								<th>Created</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td>NO PRODUCTS</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
 			) : (
 				<div className="table-container">
 					<table>
@@ -24,7 +44,7 @@ const ProductsTable = ({ refreshProducts, products, loadingProducts }) => {
 								<th>Description</th>
 								<th>In Price</th>
 								<th>Price</th>
-								<th>Count</th>
+								<th>In Stock</th>
 								<th>Unit</th>
 								<th>Type</th>
 								<th>Created</th>
@@ -48,7 +68,7 @@ const ProductsTable = ({ refreshProducts, products, loadingProducts }) => {
 					</table>
 				</div>
 			)}
-		</div>
+		</>
 	);
 };
 
