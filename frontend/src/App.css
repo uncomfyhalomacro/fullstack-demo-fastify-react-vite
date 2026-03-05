@@ -50,6 +50,7 @@
 
 .m-nav-section {
 	margin-left: 20%;
+	align-items: center;
 }
 
 .m-nav-section h2 {
@@ -57,16 +58,6 @@
 	display: inline-block;
 	text-align: center;
 	margin-bottom: 10px;
-}
-
-.m-nav-section h2::after {
-	content: "";
-	position: absolute;
-	left: 0;
-	bottom: -4px;
-	width: 100%;
-	height: 3px;
-	background-color: blue;
 }
 
 .h-navbar-split {
@@ -122,6 +113,7 @@
 
 .h-container {
 	display: flex;
+	margin-top: 1%;
 }
 
 .left {
@@ -132,10 +124,174 @@
 	flex: 1;
 }
 
+.left-subcontainer {
+	margin-top: 1%;
+}
+
+.right-subcontainer {
+	margin-top: 1%;
+	margin-left: 3%;
+	margin-right: 3%;
+}
+
+.u-input-section {
+	margin-bottom: 2%;
+}
+
 .u-input-split {
 	display: flex;
 }
 
 .u-input-split > .h-button-extras {
 	margin-left: auto;
+}
+
+.h-button-extras {
+	display: flex;
+	align-items: center;
+	gap: 30px;
+}
+
+.h-button-extras button {
+	background: rgba(255, 255, 255, 0.55);
+	backdrop-filter: blur(15px) saturate(180%);
+	-webkit-backdrop-filter: blur(15px) saturate(180%);
+
+	border-radius: 14px;
+
+	border: 2px solid transparent;
+
+	box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+
+	display: inline-flex;
+	align-items: center;
+	gap: 8px;
+
+	height: 45px;
+	padding: 0 16px;
+
+	cursor: pointer;
+	transition: all 0.15s ease;
+}
+
+.h-button-extras button:hover {
+	background: rgba(255, 255, 255, 0.8);
+	box-shadow:
+		0 6px 20px rgba(0, 0, 0, 0.2),
+		inset 0 1px 0 rgba(255, 255, 255, 0.9);
+}
+
+.h-button-extras button:active {
+	transform: scale(0.97);
+	border-color: rgba(55, 55, 55, 0.8);
+}
+
+.h-button-extras-icon {
+	display: flex;
+	align-items: center;
+}
+
+.dark-blue-button {
+	color: #2596be;
+}
+
+.blue-button {
+	color: #b7daf7;
+}
+
+.blurple-button {
+	color: #5264eb;
+}
+.yellow-button {
+	color: #ded44e;
+}
+
+.red-button {
+	color: #ee0101;
+}
+
+.green-button {
+	color: #43ad3b;
+}
+
+.orange-button {
+	color: #ffa938;
+}
+
+.search-wrapper {
+	margin-bottom: 12px;
+}
+.search-label {
+	position: relative;
+	display: inline-block;
+}
+
+.search-input {
+	border-radius: 12px;
+	padding-left: 5px;
+	padding-top: 2px;
+	padding-bottom: 2px;
+	padding-right: 35px;
+	height: 35px;
+}
+
+.search-icon {
+	position: absolute;
+	right: 8px;
+	top: 50%;
+	transform: translateY(-50%);
+	color: #19f0ff;
+	pointer-events: none;
+}
+
+.hamburger-menu-icon {
+	/* I think i should hide this when the device is large. Will show this for now */
+	position: relative;
+	padding-top: 2px;
+	padding-right: 5px;
+}
+
+.menu-items-section {
+	margin-top: 12px;
+}
+
+.menu-title-section {
+	text-align: center;
+	align-items: center;
+	width: 100%;
+}
+
+.menu-item {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	padding: 10px;
+	background-color: transparent;
+
+	border-color: transparent;
+	border-bottom: 2px solid transparent;
+	transition: border-color 0.2s ease;
+	cursor: pointer;
+	width: 100%;
+}
+
+.menu-item:hover {
+	border-bottom: 2px solid #2563eb;
+}
+
+.menu-item:active {
+	border-bottom: 2px solid #2563eb;
+}
+
+.menu-item:active::after {
+	background-color: #1d4ed8;
+}
+
+.menu-item:active {
+	background-color: rgba(37, 99, 235, 0.08);
+}
+
+.menu-item-icon {
+	display: flex;
+	align-items: center;
 }
