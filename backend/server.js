@@ -22,6 +22,7 @@ import { handlerUserLogout } from "./routes/auth/logout.js";
 
 const fastify = Fastify({
 	logger: true,
+	trustProxy: PROD === "prod"
 });
 
 fastify.register(fastifyCookie, {
