@@ -28,6 +28,7 @@ const fastify = Fastify({
 fastify.register(fastifyCookie, {
 	secret: COOKIE_SECRET,
 });
+
 await fastify.register(import("@fastify/swagger"), {
 	openapi: {
 		openapi: "3.0.0",
@@ -75,7 +76,7 @@ await fastify.register(import("@fastify/swagger-ui"), {
 });
 
 fastify.register(cors, {
-	strictPreflight: false,
+	strictPreflight: true,
 	origin:
 		PROD === "dev" ? [`http://${HOST}:${PORT}`, `${CLIENT_URL}`] : [`${CLIENT_URL}`], // TODO: add an env
 	methods: ["GET", "HEAD", "POST", "DELETE", "PUT", "PATCH"],
