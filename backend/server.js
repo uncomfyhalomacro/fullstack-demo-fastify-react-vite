@@ -18,6 +18,7 @@ import { handlerIncrementDecrement } from "./routes/products/increment-decrement
 import { handlerRemoveProduct } from "./routes/products/remove.js";
 import { handlerUpdateProductInfo } from "./routes/products/update.js";
 import { verifyJwt } from "./services/auth/jwt.js";
+import { handlerUserLogout } from "./routes/auth/logout.js";
 
 const fastify = Fastify({
 	logger: true,
@@ -165,6 +166,7 @@ fastify.get("/:role/products/:user_id", async (req, resp) => {
 		handlerGetProductsByUserIDFromPath,
 	);
 });
+
 fastify.post(
 	"/auth/user/register",
 	{
@@ -182,6 +184,11 @@ fastify.post(
 	},
 	handlerUserRegister,
 );
+
+fastify.get("/auth/user/logout", async (req, res) => {
+	await handleProtectedWithLogin(req, res, handlerUserLogout);
+});
+
 fastify.post(
 	"/auth/user/login",
 	{
