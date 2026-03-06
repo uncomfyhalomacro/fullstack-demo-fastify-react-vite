@@ -4,6 +4,10 @@ run: run-backend run-frontend
 build:
 	cd frontend && npm run build
 
+install-deps:
+	cd frontend && npm install
+	cd backend && npm install
+
 run-mock:
 	cd backend && npm run mock
 
