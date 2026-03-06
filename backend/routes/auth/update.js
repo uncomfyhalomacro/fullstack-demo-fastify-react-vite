@@ -16,7 +16,12 @@ const handlerUserUpdate = async (req, res, sessionData) => {
 			newEmail,
 		});
 		if (hasReplacedPassword || hasReplacedUsername) {
-			res.clearCookie("session", { path: "/" });
+			res.clearCookie("session", {
+				path: "/",
+				secure: true,
+				httpOnly: true,
+				sameSite: "none",
+			});
 		}
 		return res.send({
 			hasReplacedPassword,

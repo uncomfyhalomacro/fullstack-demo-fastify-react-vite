@@ -5,6 +5,9 @@ const handlerUserLogout = async (req, res) => {
 		return res
 			.clearCookie("session", {
 				path: "/",
+				secure: true,
+				httpOnly: true,
+				sameSite: "none",
 			})
 			.code(200)
 			.send("Logged out");
