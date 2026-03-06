@@ -1,5 +1,9 @@
 [parallel]
 run: run-backend run-frontend
+
+build:
+	cd frontend && npm run build
+
 run-backend:
 	cd backend && npm run serve
 run-frontend:
