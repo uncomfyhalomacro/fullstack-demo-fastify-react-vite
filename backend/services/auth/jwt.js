@@ -1,5 +1,5 @@
 import { sign, verify } from "@node-rs/jsonwebtoken";
-import {  AUD, ISSUER, SECRET } from "../../env.js"; 
+import { AUD, ISSUER, SECRET } from "../../env.js";
 
 const getUtcTimestamp = () => Math.floor(Date.now() / 1000);
 const oneDayInSeconds = 86400;

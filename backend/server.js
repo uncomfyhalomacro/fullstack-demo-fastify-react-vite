@@ -1,13 +1,15 @@
+import path from "node:path";
 import fastifyCookie from "@fastify/cookie";
-import fastifyStatic from "@fastify/static";
 import cors from "@fastify/cors";
+import fastifyStatic from "@fastify/static";
 import Fastify from "fastify";
-import { COOKIE_SECRET, PORT, PROD, HOST, CLIENT_URL } from "./env.js";
+import { CLIENT_URL, COOKIE_SECRET, HOST, PORT, PROD } from "./env.js";
 import {
 	handleProtectedWithLogin,
 	handleProtectedWithLoginWithRoleCheck,
 } from "./middleware/protect/login.js";
 import { handlerUserLogin } from "./routes/auth/login.js";
+import { handlerUserLogout } from "./routes/auth/logout.js";
 import { handlerUserRegister } from "./routes/auth/register.js";
 import { handlerUserUpdate } from "./routes/auth/update.js";
 import { handlerAddProduct } from "./routes/products/add.js";
@@ -19,14 +21,12 @@ import { handlerIncrementDecrement } from "./routes/products/increment-decrement
 import { handlerRemoveProduct } from "./routes/products/remove.js";
 import { handlerUpdateProductInfo } from "./routes/products/update.js";
 import { verifyJwt } from "./services/auth/jwt.js";
-import { handlerUserLogout } from "./routes/auth/logout.js";
-import path from "node:path"
 
-const __dirname = new URL('.', import.meta.url).pathname
+const __dirname = new URL(".", import.meta.url).pathname;
 
 const fastify = Fastify({
 	logger: true,
-	trustProxy: PROD === "prod"
+	trustProxy: PROD === "prod",
 });
 
 fastify.register(fastifyCookie, {
@@ -82,7 +82,9 @@ await fastify.register(import("@fastify/swagger-ui"), {
 fastify.register(cors, {
 	strictPreflight: true,
 	origin:
-		PROD === "dev" ? [`http://${HOST}:${PORT}`, `${CLIENT_URL}`] : [`${CLIENT_URL}`], // TODO: add an env
+		PROD === "dev"
+			? [`http://${HOST}:${PORT}`, `${CLIENT_URL}`]
+			: [`${CLIENT_URL}`], // TODO: add an env
 	methods: ["GET", "HEAD", "POST", "DELETE", "PUT", "PATCH"],
 	allowedHeaders: ["Content-Type", "Authorization"],
 	credentials: true,
@@ -276,10 +278,9 @@ fastify.get("/api/auth/user/profile", async (request, reply) => {
 });
 
 await fastify.register(fastifyStatic, {
-  root: path.join(__dirname, "../frontend/dist"),
-  prefix: "/"
-})
-
+	root: path.join(__dirname, "../frontend/dist"),
+	prefix: "/",
+});
 
 try {
 	await fastify.listen({ host: HOST, port: PORT });

@@ -22,7 +22,7 @@ const handlerUserUpdate = async (req, res, sessionData) => {
 				secure: true,
 				httpOnly: true,
 				sameSite: "lax",
-				domain: DOMAIN
+				domain: DOMAIN,
 			});
 		}
 		return res.send({

@@ -1,7 +1,7 @@
 import { loadEnvFile } from "node:process";
 
-if (process.env.PROD !== 'prod') {
-  loadEnvFile()
+if (process.env.PROD !== "prod") {
+	loadEnvFile();
 }
 
 export const DOMAIN = process.env.DOMAIN || undefined;

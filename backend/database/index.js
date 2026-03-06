@@ -1,5 +1,5 @@
 import { Sequelize } from "sequelize";
-import { PG_DB, PG_PASSWORD, PG_USER, PROD, PG_HOST } from "../env.js";
+import { PG_DB, PG_HOST, PG_PASSWORD, PG_USER, PROD } from "../env.js";
 
 const sequelize = new Sequelize(PG_DB, PG_USER, PG_PASSWORD, {
 	host: PG_HOST,

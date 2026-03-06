@@ -1,17 +1,17 @@
 import {
-  BookOpenText,
-  BrainCog,
-  CloudUpload,
-  FileStack,
-  LogOut,
-  MessageCircleX,
-  Notebook,
-  ReceiptText,
-  ShelvingUnit,
-  SquarePercent,
-  Tag,
-  UsersRound,
-  Menu
+	BookOpenText,
+	BrainCog,
+	CloudUpload,
+	FileStack,
+	LogOut,
+	Menu,
+	MessageCircleX,
+	Notebook,
+	ReceiptText,
+	ShelvingUnit,
+	SquarePercent,
+	Tag,
+	UsersRound,
 } from "lucide-react";
 import { useLogout } from "../../auth/hooks/useLogout.jsx";
 
@@ -20,7 +20,7 @@ export function MenuSection() {
 		<div>
 			<nav className="m-nav-section">
 				<div className="menu-title-section">
-					<Menu size={20} className="hamburger-menu-icon"  />
+					<Menu size={20} className="hamburger-menu-icon" />
 					<h2>Menu</h2>
 				</div>
 

@@ -9,59 +9,64 @@ import { NavBar } from "./features/ui/NavBar.jsx";
 import { ArticleSearch, ProductSearch } from "./features/ui/Search.jsx";
 
 function App() {
-  const { data: user, isLoading } = useUser();
+	const { data: user, isLoading } = useUser();
 
-  const { data: products, isLoading: loadingProducts, error, refetch } = useGetProducts({
-    user_id: user?.id,
-    role: user?.role,
-  });
+	const {
+		data: products,
+		isLoading: loadingProducts,
+		error,
+		refetch,
+	} = useGetProducts({
+		user_id: user?.id,
+		role: user?.role,
+	});
 
-  if (isLoading) return <div>Loading...</div>;
+	if (isLoading) return <div>Loading...</div>;
 
-  if (!user) {
-    return (
-      <div className="modal-overlay">
-        <div className="modal-card">
-          <LoginForm />
-        </div>
-      </div>
-    );
-  }
+	if (!user) {
+		return (
+			<div className="modal-overlay">
+				<div className="modal-card">
+					<LoginForm />
+				</div>
+			</div>
+		);
+	}
 
-  return (
-    <div>
-      <NavBar user={user} />
-      {!error ? (
-        <div className="h-container">
-          <div className="left">
-            <div className="left-subcontainer">
-              <MenuSection />
-            </div>
-          </div>
-          <div className="right">
-            <div className="right-subcontainer">
-              <div className="u-input-section">
-                <div className="u-input-split">
-                  <div className="u-search">
-                    <ArticleSearch />
-                    <ProductSearch />
-                  </div>
-                  <ButtonExtras />
-                </div>
-              </div>
-              <ProductsTable
-                refreshProducts={refetch}
-                products={products}
-                loadingProducts={loadingProducts}
-              />
-            </div>
-          </div>
-        </div>
-      ) : (
-        <div>Something went wrong...</div>
-      )}
-    </div>
-  );
+	return (
+		<div>
+			<NavBar user={user} />
+			{!error ? (
+				<div className="h-container">
+					<div className="left">
+						<div className="left-subcontainer">
+							<MenuSection />
+						</div>
+					</div>
+					<div className="right">
+						<div className="right-subcontainer">
+							<div className="u-input-section">
+								<div className="u-input-split">
+									<div className="u-search">
+										<ArticleSearch />
+										<ProductSearch />
+									</div>
+									<ButtonExtras />
+								</div>
+							</div>
+							<ProductsTable
+								refreshProducts={refetch}
+								products={products}
+								loadingProducts={loadingProducts}
+							/>
+						</div>
+					</div>
+				</div>
+			) : (
+				<div>Something went wrong...</div>
+			)}
+		</div>
+	);
 }
 
 export default App;

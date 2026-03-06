@@ -24,7 +24,7 @@
 	border-radius: 12px;
 	width: 360px;
 	max-width: 90%;
-	box-shadow: 0 20px 40px rgba(0,0,0,0.25);
+	box-shadow: 0 20px 40px rgba(0, 0, 0, 0.25);
 	animation: modalFade 0.2s ease;
 }
 
@@ -165,7 +165,6 @@
 	text-align: center;
 	margin-bottom: 10px;
 }
-
 
 .h-navbar-split {
 	display: flex;
@@ -356,7 +355,7 @@
 }
 
 .hamburger-menu-icon-mobile {
-    	display: none;
+	display: none;
 }
 
 .menu-items-section {
@@ -405,7 +404,6 @@
 }
 
 @media (max-width: 1024px) {
-
 	.h-container {
 		flex-direction: column;
 	}
@@ -430,11 +428,11 @@
 	}
 
 	.menu-title-section h2 {
-    		display: none;
+		display: none;
 	}
 
 	.menu-items-section {
-    		display: none;
+		display: none;
 	}
 
 	.hamburger-menu-icon {
@@ -442,14 +440,14 @@
 	}
 
 	.hamburger-menu-icon-mobile {
-        	position: block;
-        	padding-top: 2px;
-        	padding-right: 5px;
-    		display: block;
+		position: block;
+		padding-top: 2px;
+		padding-right: 5px;
+		display: block;
 	}
 
 	.h-profile-information {
-    		display: none;
+		display: none;
 	}
 
 	.h-button-extras {
@@ -468,7 +466,6 @@
 }
 
 @media (max-width: 768px) {
-
 	.modal-card {
 		width: 95%;
 		padding: 1.5rem;
@@ -477,7 +474,6 @@
 	.h-navbar {
 		padding: 10px;
 	}
-
 
 	.h-navbar-split {
 		display: flex;
@@ -488,7 +484,6 @@
 	.lang {
 		margin-left: auto;
 	}
-
 
 	.lang-sections {
 		width: 100%;
@@ -542,7 +537,6 @@
 }
 
 @media (max-width: 480px) {
-
 	.modal-card {
 		padding: 1rem;
 	}

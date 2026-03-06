@@ -25,17 +25,11 @@ const LoginForm = () => {
 						<input name="password" type="password" required />
 					</div>
 
-					<button
-						type="submit"
-						className="login-btn"
-						disabled={isPending}
-					>
+					<button type="submit" className="login-btn" disabled={isPending}>
 						{isPending ? "Logging in..." : "Login"}
 					</button>
 
-					{error && (
-						<p className="error-message">Login failed</p>
-					)}
+					{error && <p className="error-message">Login failed</p>}
 				</form>
 			</div>
 		</div>
