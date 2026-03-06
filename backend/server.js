@@ -75,7 +75,7 @@ await fastify.register(import("@fastify/swagger-ui"), {
 });
 
 fastify.register(cors, {
-	strictPreflight: true,
+	strictPreflight: false,
 	origin:
 		PROD === "dev" ? [`http://${HOST}:${PORT}`, `${CLIENT_URL}`] : [`${CLIENT_URL}`], // TODO: add an env
 	methods: ["GET", "HEAD", "POST", "DELETE", "PUT", "PATCH"],
