@@ -1,6 +1,8 @@
 import { loadEnvFile } from "node:process";
 
-loadEnvFile();
+if (process.env.PROD !== 'prod') {
+  loadEnvFile()
+}
 
 export const PROD = process.env.PROD || "prod";
 export const COOKIE_SECRET = process.env.COOKIE_SECRET || "cookie-secret";
