@@ -1,3 +1,4 @@
+import { DOMAIN } from "../../env.js";
 import { update } from "../../services/auth/core.js";
 
 const handlerUserUpdate = async (req, res, sessionData) => {
@@ -20,7 +21,8 @@ const handlerUserUpdate = async (req, res, sessionData) => {
 				path: "/",
 				secure: true,
 				httpOnly: true,
-				sameSite: "none",
+				sameSite: "lax",
+				domain: DOMAIN
 			});
 		}
 		return res.send({

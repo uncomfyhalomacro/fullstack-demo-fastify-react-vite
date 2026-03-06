@@ -1,4 +1,4 @@
-import { login } from "../../services/auth/core.js";
+import { DOMAIN } from "../../env.js";
 
 const handlerUserLogout = async (req, res) => {
 	try {
@@ -7,7 +7,8 @@ const handlerUserLogout = async (req, res) => {
 				path: "/",
 				secure: true,
 				httpOnly: true,
-				sameSite: "none",
+				sameSite: "lax",
+				domain: DOMAIN
 			})
 			.code(200)
 			.send("Logged out");

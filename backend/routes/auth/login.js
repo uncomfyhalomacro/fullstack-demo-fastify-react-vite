@@ -1,3 +1,4 @@
+import { DOMAIN } from "../../env.js";
 import { login } from "../../services/auth/core.js";
 import { generateJwt } from "../../services/auth/jwt.js";
 
@@ -15,9 +16,10 @@ const handlerUserLogin = async (req, res) => {
 			return res
 				.setCookie("session", jwtToken, {
 					path: "/",
+					domain: DOMAIN,
 					secure: true,
 					httpOnly: true,
-					sameSite: "none",
+					sameSite: "lax",
 				})
 				.code(200)
 				.send({
