@@ -4,8 +4,12 @@ run: run-backend run-frontend
 build:
 	cd frontend && npm run build
 
+run-mock:
+	cd backend && npm run mock
+
 run-backend:
 	cd backend && npm run serve
+
 run-frontend:
 	cd frontend && npm run dev
 
