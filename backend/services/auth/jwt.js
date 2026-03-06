@@ -1,11 +1,6 @@
-import { loadEnvFile } from "node:process";
 import { sign, verify } from "@node-rs/jsonwebtoken";
+import {  AUD, ISSUER, SECRET } from "../../env.js"; 
 
-loadEnvFile();
-
-const SECRET = process.env.JWT_SECRET || "secret";
-const ISSUER = process.env.JWT_ISSUER || "";
-const AUD = process.env.JWT_AUD || "";
 const getUtcTimestamp = () => Math.floor(Date.now() / 1000);
 const oneDayInSeconds = 86400;
 

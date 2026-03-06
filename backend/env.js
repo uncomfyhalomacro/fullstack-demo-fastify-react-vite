@@ -11,3 +11,6 @@ export const PG_DB = process.env.PG_DB || "db";
 export const PG_USER = process.env.PG_USER || "";
 export const PG_PASSWORD = process.env.PG_PASSWORD || "";
 export const PG_HOST = process.env.PG_HOST || "localhost";
+export const SECRET = process.env.JWT_SECRET || "secret";
+export const ISSUER = process.env.JWT_ISSUER || "";
+export const AUD = process.env.JWT_AUD || "";
