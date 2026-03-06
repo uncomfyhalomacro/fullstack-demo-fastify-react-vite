@@ -7,7 +7,7 @@ const handlerUserLogout = async (req, res) => {
 				path: "/",
 				secure: true,
 				httpOnly: true,
-				sameSite: "lax",
+				sameSite: "none",
 			})
 			.code(200)
 			.send("Logged out");
