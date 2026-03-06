@@ -1,4 +1,5 @@
 import fastifyCookie from "@fastify/cookie";
+import fastifyStatic from "@fastify/static";
 import cors from "@fastify/cors";
 import Fastify from "fastify";
 import { COOKIE_SECRET, PORT, PROD, HOST, CLIENT_URL } from "./env.js";
@@ -19,6 +20,9 @@ import { handlerRemoveProduct } from "./routes/products/remove.js";
 import { handlerUpdateProductInfo } from "./routes/products/update.js";
 import { verifyJwt } from "./services/auth/jwt.js";
 import { handlerUserLogout } from "./routes/auth/logout.js";
+import path from "node:path"
+
+const __dirname = new URL('.', import.meta.url).pathname
 
 const fastify = Fastify({
 	logger: true,
@@ -84,12 +88,12 @@ fastify.register(cors, {
 	credentials: true,
 });
 
-fastify.get("/healthz", async (_, resp) => {
+fastify.get("/api/healthz", async (_, resp) => {
 	return resp.code(200).send("OK");
 });
 
 fastify.post(
-	"/:role/products/:user_id",
+	"/api/:role/products/:user_id",
 	{
 		schema: {
 			body: {
@@ -117,7 +121,7 @@ fastify.post(
 );
 
 fastify.put(
-	"/:role/products/:user_id/:id/:inc_dec_opt/:rawValue",
+	"/api/:role/products/:user_id/:id/:inc_dec_opt/:rawValue",
 	async (req, resp) => {
 		const { role } = req.params;
 		await handleProtectedWithLoginWithRoleCheck(
@@ -129,7 +133,7 @@ fastify.put(
 	},
 );
 
-fastify.patch("/:role/products/:user_id/:id", async (req, resp) => {
+fastify.patch("/api/:role/products/:user_id/:id", async (req, resp) => {
 	const { role } = req.params;
 	await handleProtectedWithLoginWithRoleCheck(
 		req,
@@ -139,7 +143,7 @@ fastify.patch("/:role/products/:user_id/:id", async (req, resp) => {
 	);
 });
 
-fastify.delete("/:role/products/:user_id/:id", async (req, resp) => {
+fastify.delete("/api/:role/products/:user_id/:id", async (req, resp) => {
 	const { role } = req.params;
 	await handleProtectedWithLoginWithRoleCheck(
 		req,
@@ -149,7 +153,7 @@ fastify.delete("/:role/products/:user_id/:id", async (req, resp) => {
 	);
 });
 
-fastify.get("/:role/products", async (req, resp) => {
+fastify.get("/api/:role/products", async (req, resp) => {
 	const { role } = req.params;
 	await handleProtectedWithLoginWithRoleCheck(
 		req,
@@ -159,7 +163,7 @@ fastify.get("/:role/products", async (req, resp) => {
 	);
 });
 
-fastify.get("/:role/products/:user_id", async (req, resp) => {
+fastify.get("/api/:role/products/:user_id", async (req, resp) => {
 	const { role } = req.params;
 	await handleProtectedWithLoginWithRoleCheck(
 		req,
@@ -170,7 +174,7 @@ fastify.get("/:role/products/:user_id", async (req, resp) => {
 });
 
 fastify.post(
-	"/auth/user/register",
+	"/api/auth/user/register",
 	{
 		schema: {
 			body: {
@@ -187,12 +191,12 @@ fastify.post(
 	handlerUserRegister,
 );
 
-fastify.get("/auth/user/logout", async (req, res) => {
+fastify.get("/api/auth/user/logout", async (req, res) => {
 	await handleProtectedWithLogin(req, res, handlerUserLogout);
 });
 
 fastify.post(
-	"/auth/user/login",
+	"/api/auth/user/login",
 	{
 		schema: {
 			security: [],
@@ -225,7 +229,7 @@ fastify.post(
 	handlerUserLogin,
 );
 fastify.put(
-	"/auth/user/update",
+	"/api/auth/user/update",
 	{
 		schema: {
 			description:
@@ -254,7 +258,7 @@ fastify.put(
 	},
 );
 
-fastify.get("/auth/user/profile", async (request, reply) => {
+fastify.get("/api/auth/user/profile", async (request, reply) => {
 	try {
 		const decoded = await verifyJwt({
 			token: request.cookies.session,
@@ -270,6 +274,12 @@ fastify.get("/auth/user/profile", async (request, reply) => {
 		return reply.status(401).send({ message: "unauthorized" }); // Token is invalid
 	}
 });
+
+await fastify.register(fastifyStatic, {
+  root: path.join(__dirname, "../frontend/dist"),
+  prefix: "/"
+})
+
 
 try {
 	await fastify.listen({ host: HOST, port: PORT });
