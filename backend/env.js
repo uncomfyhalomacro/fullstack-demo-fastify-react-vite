@@ -4,6 +4,8 @@ if (process.env.PROD !== 'prod') {
   loadEnvFile()
 }
 
+export const CLIENT_URL = process.env.CLIENT_URL || "http://localhost:5173";
+export const HOST = process.env.HOST || "localhost";
 export const PROD = process.env.PROD || "prod";
 export const COOKIE_SECRET = process.env.COOKIE_SECRET || "cookie-secret";
 export const PORT = process.env.PORT || 3000;

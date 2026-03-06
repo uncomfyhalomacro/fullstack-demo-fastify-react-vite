@@ -1,7 +1,7 @@
 import fastifyCookie from "@fastify/cookie";
 import cors from "@fastify/cors";
 import Fastify from "fastify";
-import { COOKIE_SECRET, PORT, PROD } from "./env.js";
+import { COOKIE_SECRET, PORT, PROD, HOST, CLIENT_URL } from "./env.js";
 import {
 	handleProtectedWithLogin,
 	handleProtectedWithLoginWithRoleCheck,
@@ -76,7 +76,7 @@ await fastify.register(import("@fastify/swagger-ui"), {
 fastify.register(cors, {
 	strictPreflight: true,
 	origin:
-		PROD === "dev" ? ["http://localhost:8080", "http://localhost:5173"] : [], // TODO: add an env
+		PROD === "dev" ? [`http://${HOST}:${PORT}`, `${CLIENT_URL}`] : [], // TODO: add an env
 	methods: ["GET", "HEAD", "POST", "DELETE", "PUT", "PATCH"],
 	allowedHeaders: ["Content-Type", "Authorization"],
 	credentials: true,
@@ -270,7 +270,7 @@ fastify.get("/auth/user/profile", async (request, reply) => {
 });
 
 try {
-	await fastify.listen({ port: PORT });
+	await fastify.listen({ host: HOST, port: PORT });
 	await fastify.ready();
 	fastify.swagger();
 } catch (err) {
