@@ -10,7 +10,6 @@ import { register } from "../services/auth/core.js";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-loadEnvFile();
 const PROD = process.env.PROD || "dev";
 
 const users = Array.from({ length: 100 }, () => ({
