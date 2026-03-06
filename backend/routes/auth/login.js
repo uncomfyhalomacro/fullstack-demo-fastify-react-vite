@@ -17,7 +17,7 @@ const handlerUserLogin = async (req, res) => {
 					path: "/",
 					secure: true,
 					httpOnly: true,
-					sameSite: true,
+					sameSite: "none",
 					maxAge: 3600 * 1000,
 				})
 				.code(200)
