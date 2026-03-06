@@ -6,7 +6,7 @@ run-prod: run-backend run-frontend-prod
 
 run-frontend-prod: build
 	cd frontend && npm install serve
-	cd frontend && npx serve -l tcp://0.0.0.0:$PORT dist
+	cd frontend && npx serve -l tcp://0.0.0.0:$FRONTEND_PORT dist
 
 build:
 	cd frontend && npm run build
