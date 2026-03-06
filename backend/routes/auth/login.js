@@ -18,7 +18,6 @@ const handlerUserLogin = async (req, res) => {
 					secure: true,
 					httpOnly: true,
 					sameSite: "none",
-					maxAge: 3600 * 1000,
 				})
 				.code(200)
 				.send({
