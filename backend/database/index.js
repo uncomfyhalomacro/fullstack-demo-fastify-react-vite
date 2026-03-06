@@ -4,12 +4,15 @@ import { PG_DB, PG_PASSWORD, PG_USER, PROD, PG_HOST } from "../env.js";
 const sequelize = new Sequelize(PG_DB, PG_USER, PG_PASSWORD, {
 	host: PG_HOST,
 	dialect: "postgres",
-	dialectOptions: {
-		ssl: {
-			require: PROD === "prod",
-			rejectUnauthorized: false,
-		},
-	},
+	dialectOptions:
+		PROD === "prod"
+			? {
+					ssl: {
+						require: PROD === "prod",
+						rejectUnauthorized: false,
+					},
+				}
+			: undefined,
 });
 
 sequelize
