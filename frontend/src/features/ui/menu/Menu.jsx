@@ -1,17 +1,18 @@
 import {
-	BookOpenText,
-	BrainCog,
-	CloudUpload,
-	FileStack,
-	LogOut,
-	MessageCircleX,
-	Notebook,
-	ReceiptText,
-	ShelvingUnit,
-	SquarePercent,
-	Tag,
-	UsersRound,
+  BookOpenText,
+  BrainCog,
+  CloudUpload,
+  FileStack,
+  LogOut,
+  MessageCircleX,
+  Notebook,
+  ReceiptText,
+  ShelvingUnit,
+  SquarePercent,
+  Tag,
+  UsersRound,
 } from "lucide-react";
+import { useLogout } from "../../auth/hooks/useLogout.jsx";
 
 export function MenuSection() {
 	return (
@@ -44,9 +45,10 @@ export function MenuItemComponent({
 	icon: Icon,
 	placeholder,
 	extraClassNames,
+	setAction,
 }) {
 	return (
-		<button type="button" className="menu-item">
+		<button type="button" className="menu-item" onClick={setAction}>
 			<Icon size={20} className={`menu-item-icon ${extraClassNames}`} />
 			<span>{placeholder}</span>
 		</button>
@@ -164,11 +166,13 @@ export function ImportExportButton() {
 }
 
 export function LogOutButton() {
+	const { mutate, isPending } = useLogout();
 	return (
 		<MenuItemComponent
 			icon={LogOut}
-			placeholder={"Log out"}
+			placeholder={isPending ? "Logging out" : "Logout"}
 			extraClassNames={"blue-button"}
+			setAction={mutate}
 		/>
 	);
 }

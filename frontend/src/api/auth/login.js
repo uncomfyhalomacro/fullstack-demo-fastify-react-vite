@@ -13,10 +13,10 @@ async function fetchLogin(formData) {
 	});
 
 	if (!res.ok) {
-		return { success: false };
+		return undefined;
 	}
 
-	return { success: true };
+	return await res.json();
 }
 
 export { fetchLogin };

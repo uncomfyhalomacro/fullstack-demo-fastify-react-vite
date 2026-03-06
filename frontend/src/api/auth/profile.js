@@ -1,16 +1,21 @@
 import { API_URL } from "../../env.js";
 
 const fetchUserProfile = async () => {
-	const response = await fetch(`${API_URL}/auth/user/profile`, {
-		method: "GET",
-		credentials: "include",
-	});
+	try {
+		const response = await fetch(`${API_URL}/auth/user/profile`, {
+			method: "GET",
+			credentials: "include",
+		});
 
-	if (!response.ok) {
-		throw new Error("Not authorized");
+		if (!response.ok) {
+			return null;
+		}
+
+		return await response.json();
+	} catch (err) {
+		console.error(err);
+		return null;
 	}
-
-	return await response.json();
 };
 
 export { fetchUserProfile };

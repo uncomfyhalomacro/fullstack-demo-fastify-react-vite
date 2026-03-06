@@ -8,8 +8,9 @@ export function useLogin() {
 		mutationFn: (formData) => {
 			return fetchLogin(formData);
 		},
-		onSuccess: () => {
-			queryClient.invalidateQueries({ queryKey: ["user"] });
+		onSuccess: (user) => {
+			queryClient.setQueryData(["user"], user);
+			queryClient.invalidateQueries(["products"]);
 		},
 	});
 }
