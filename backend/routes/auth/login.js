@@ -17,7 +17,7 @@ const handlerUserLogin = async (req, res) => {
 					path: "/",
 					secure: true,
 					httpOnly: true,
-					sameSite: "Lax",
+					sameSite: "lax",
 				})
 				.code(200)
 				.send({

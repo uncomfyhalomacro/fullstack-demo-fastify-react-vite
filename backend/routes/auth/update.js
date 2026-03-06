@@ -20,7 +20,7 @@ const handlerUserUpdate = async (req, res, sessionData) => {
 				path: "/",
 				secure: true,
 				httpOnly: true,
-				sameSite: "Lax",
+				sameSite: "lax",
 			});
 		}
 		return res.send({
