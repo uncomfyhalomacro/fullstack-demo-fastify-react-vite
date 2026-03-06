@@ -1,3 +1,5 @@
+import { Menu } from "lucide-react";
+
 export function LanguagesSelection() {
 	return (
 		<div className="lang">
@@ -36,6 +38,7 @@ export function NavBar({ user }) {
 	return (
 		<nav className="h-navbar">
 			<div className="h-navbar-split">
+				<Menu size={32} className="hamburger-icon-mobile" />
 				<ProfileInformation username={user.username} role={user.role} />
 				<LanguagesSelection />
 			</div>
